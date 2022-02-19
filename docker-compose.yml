@@ -1,0 +1,15 @@
+version: '3'
+services:
+  api:
+    container_name: 'api-ezops'
+    restart: always
+    image: mateuswelter01/projects:ezops-test-mateuswelter
+    networks:
+      - api-ezops
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+networks:
+  api-ezops:
+    driver: bridge

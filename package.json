@@ -1,0 +1,23 @@
+{
+  "name": "ezops-test-mateuswelter",
+  "version": "1.0.0",
+  "description": "test from ezops",
+  "main": "server.js",
+  "scripts": {
+    "test": "jasmine",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.3",
+    "mongoose": "^5.7.5",
+    "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "jasmine": "^3.1.0",
+    "request": "^2.87.0"
+  }
+}
