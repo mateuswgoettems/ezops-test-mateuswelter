@@ -26,7 +26,6 @@ jobs:
           npm ci 
       - name: build
         run: |
-          npm run build
           npm run test
   push_to_Docker_Hub:
     runs-on: ubuntu-latest
