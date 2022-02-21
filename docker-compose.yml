@@ -1,15 +1,15 @@
-version: '3'
+version: "3"
 services:
   api-github:
     container_name: api-ezops-github
     restart: always
-    image: mateuswelter01/projects:ezops-test-mateuswelter
+    image: mateuswelter01/projects:ezops-test-mateuswelter-github
     networks:
       - api-ezops
     expose:
       - 3000
     ports:
-      - 3001:3000
+      - 3000:3000
 networks:
   api-ezops:
     driver: bridge
