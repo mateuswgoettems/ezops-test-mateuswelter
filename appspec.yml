@@ -2,9 +2,9 @@ version: 0.0
 os: linux
 files:
   - source: .
-    destination: /home/ec2-user/app
+    destination: /home/ec2-user/ezops-test-mateuswelter
 hooks:
   ApplicationStart:
-    - location: scripts/start_server
+    - location: docker-start.sh
       timeout: 300
       runas: root
