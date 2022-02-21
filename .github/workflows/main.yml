@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-          npm ci 
+          npm ci
       - name: build
         run: |
           npm run test *.spec.js
@@ -37,7 +37,7 @@ jobs:
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
-    
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
@@ -54,31 +54,21 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USER }}/projets:ezops-test-mateuswelter
   deploy:
-    name: Push to EC2 Instance
     runs-on: ubuntu-latest
     needs: [push_to_Docker_Hub]
-
+    if: github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v1
-      - name: Deploy to EC2
-        uses: easingthemes/ssh-deploy@v2.1.5
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          SOURCE: "./"
-          REMOTE_HOST: "ec2-52-67-159-45.sa-east-1.compute.amazonaws.com"
-          REMOTE_USER: "ubuntu"
-          TARGET: "/home/github-actions/"
-      - name: update Docker
-        uses: ./
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          host: "ec2-52-67-159-45.sa-east-1.compute.amazonaws.com"
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          port: 22
-          script: |
-            cd /home/github-actions/
-            docker pull mateuswelter01/projects:ezops-test-mateuswelter
-            docker-compose up -d
-            
-          
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: sa-east-1
+      - name: Create CodeDeploy Deployment
+        id: deploy
+        run: |
+          aws deploy create-deployment \
+            --application-name node-app \
+            --deployment-group-name AppDeployment \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
