@@ -68,7 +68,7 @@ jobs:
         id: deploy
         run: |
           aws deploy create-deployment \
-            --application-name nodeapp \
-            --deployment-group-name AppDeployment \
+            --application-name Git_application \
+            --deployment-group-name dev_group \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
