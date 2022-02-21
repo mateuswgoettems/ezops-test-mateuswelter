@@ -70,6 +70,6 @@ mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true }, (er
     console.log('mongodb connected', err);
 })
 
-const server = http.listen(3000, () => {
+const server = http.listen(3001, () => {
     console.log('server is running on port', server.address().port);
 });

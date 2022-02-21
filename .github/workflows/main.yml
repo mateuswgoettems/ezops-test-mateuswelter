@@ -52,7 +52,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USER }}/nodejs-demo:latest
+          tags: ${{ secrets.DOCKER_USER }}/projets:ezops-test-mateuswelter
   deploy:
     name: Push to EC2 Instance
     runs-on: ubuntu-latest
@@ -61,9 +61,6 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v1
-      - name: see ipv4
-        run: |
-          curl icanhazip.com
       - name: Deploy to EC2
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
@@ -72,3 +69,16 @@ jobs:
           REMOTE_HOST: "ec2-52-67-159-45.sa-east-1.compute.amazonaws.com"
           REMOTE_USER: "ubuntu"
           TARGET: "/home/github-actions/"
+      - name: update Docker
+        uses: ./
+        with:
+          host: "ec2-52-67-159-45.sa-east-1.compute.amazonaws.com"
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            cd /home/github-actions/
+            docker pull mateuswelter01/projects:ezops-test-mateuswelter
+            docker-compose up -d
+            
+          
