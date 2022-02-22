@@ -17,10 +17,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 const Message = mongoose.model('Message', {
     name: String,
     message: String,
-    date: Date
+    date: String
 })
 
-const dbUrl = 'mongodb+srv://mateus:mateuswg123@cluster0.za1ho.mongodb.net/ezops?retryWrites=true&w=majority'
+const dbUrl = 'mongodb+srv://mateus:mateuswg123@cluster0.za1ho.mongodb.net/ezops-github?retryWrites=true&w=majority'
 
 app.get('/messages', (req, res) => {
     Message.find({}, (err, messages) => {

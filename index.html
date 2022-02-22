@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 
 <head>
     <title>My First Node App</title>
@@ -15,12 +15,6 @@
     <script src="/socket.io/socket.io.js"></script>
 </head>
 
-<style>
-    .inline {
-        display: inline;
-    }
-</style>
-
 <body>
     <div class="container">
         <br>
@@ -33,9 +27,7 @@
             <br>
             <button id="send" class="btn btn-success">Send</button>
         </div>
-        <div class="inline" id="messages">
-        </div>
-        <div id="message2">
+        <div id="messages">
 
         </div>
     </div>
@@ -44,7 +36,18 @@
         var socket = io();
         $(() => {
             $("#send").click(() => {
-                sendMessage({ name: $("#name").val(), message: $("#message").val(), date: new Date() });
+                let date = new Date();
+                const day = date.getDate().toString();
+                let month = '';
+                date.getMonth() > 10 ? month = (date.getMonth() + 1).toString() : month = `0${(date.getMonth() + 1).toString()}`
+
+                const year = date.getFullYear().toString();
+
+                const hour = date.getHours().toString();
+                const min = date.getMinutes().toString();
+                const sec = date.getSeconds().toString();
+
+                sendMessage({ name: $("#name").val(), message: $("#message").val(), date: `${day}/${month}/${year}-${hour}:${min}:${sec}`});
             })
 
             getMessages()
@@ -53,15 +56,7 @@
         socket.on('message', addMessages)
 
         function addMessages(message) {
-
-            const data = message.date.split('T')[0]
-            const hora = message.date.split('T')[1].split('.')[0]
-
-            console.log(data)
-            console.log(hora)
-            
-            $("#messages").append(`<h4> ${message.name} </h4> <p>Data: ${data} Hora: ${hora}</p>`)
-            $('#message2').append(`<p> ${message.message} </p>`)
+            $("#messages").append(`<h4> ${message.name} </h4> <h5>at ${message.date}</h5> <p> ${message.message} </p>`)
         }
 
         function getMessages() {
@@ -71,7 +66,6 @@
         }
 
         function sendMessage(message) {
-            console.log(message)
             $.post('http://ec2-54-232-212-237.sa-east-1.compute.amazonaws.com:3000/messages', message)
         }
     </script>
