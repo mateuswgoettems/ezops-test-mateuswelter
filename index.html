@@ -37,15 +37,23 @@
         $(() => {
             $("#send").click(() => {
                 let date = new Date();
-                const day = date.getDate().toString();
+
+                let day = '';
+                date.getDate() > 10 ? day = (date.getDate()).toString() : day = `0${(date.getDate()).toString()}`;
+
                 let month = '';
-                date.getMonth() > 10 ? month = (date.getMonth() + 1).toString() : month = `0${(date.getMonth() + 1).toString()}`
+                date.getMonth() > 10 ? month = (date.getMonth() + 1).toString() : month = `0${(date.getMonth() + 1).toString()}`;
 
                 const year = date.getFullYear().toString();
 
-                const hour = date.getHours().toString();
-                const min = date.getMinutes().toString();
-                const sec = date.getSeconds().toString();
+                let hour = '';
+                date.getHours() > 10 ? hour = (date.getHours()).toString() : hour = `0${(date.getHours()).toString()}`;
+
+                let min = '';
+                date.getMinutes() > 10 ? min = (date.getMinutes()).toString() : min = `0${(date.getMinutes()).toString()}`;
+
+                let sec = '';
+                date.getSeconds() > 10 ? sec = (date.getSeconds()).toString() : sec = `0${(date.getSeconds()).toString()}`;
 
                 sendMessage({ name: $("#name").val(), message: $("#message").val(), date: `${day}/${month}/${year}-${hour}:${min}:${sec}`});
             })
