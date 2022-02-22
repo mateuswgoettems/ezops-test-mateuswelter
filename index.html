@@ -15,6 +15,12 @@
     <script src="/socket.io/socket.io.js"></script>
 </head>
 
+<style>
+    .inline {
+        display: inline;
+    }
+</style>
+
 <body>
     <div class="container">
         <br>
@@ -27,7 +33,9 @@
             <br>
             <button id="send" class="btn btn-success">Send</button>
         </div>
-        <div id="messages">
+        <div class="inline" id="messages">
+        </div>
+        <div id="message2">
 
         </div>
     </div>
@@ -36,7 +44,7 @@
         var socket = io();
         $(() => {
             $("#send").click(() => {
-                sendMessage({ name: $("#name").val(), message: $("#message").val() });
+                sendMessage({ name: $("#name").val(), message: $("#message").val(), date: new Date() });
             })
 
             getMessages()
@@ -45,17 +53,26 @@
         socket.on('message', addMessages)
 
         function addMessages(message) {
-            $("#messages").append(`<h4> ${message.name} </h4> <p> ${message.message} </p>`)
+
+            const data = message.date.split('T')[0]
+            const hora = message.date.split('T')[1].split('.')[0]
+
+            console.log(data)
+            console.log(hora)
+            
+            $("#messages").append(`<h4> ${message.name} </h4> <p>Data: ${data} Hora: ${hora}</p>`)
+            $('#message2').append(`<p> ${message.message} </p>`)
         }
 
         function getMessages() {
-            $.get('http://52.67.159.45:3000/messages', (data) => {
+            $.get('http://ec2-54-232-212-237.sa-east-1.compute.amazonaws.com:3000/messages', (data) => {
                 data.forEach(addMessages);
             })
         }
 
         function sendMessage(message) {
-            $.post('http://52.67.159.45:3000/messages', message)
+            console.log(message)
+            $.post('http://ec2-54-232-212-237.sa-east-1.compute.amazonaws.com:3000/messages', message)
         }
     </script>
 
